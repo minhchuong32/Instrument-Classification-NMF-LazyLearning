@@ -1,0 +1,374 @@
+[
+    {
+        "file": "overlap_000_guitar_bass_keyboard.wav",
+        "components": [
+            "guitar_acoustic_035-039-075",
+            "bass_synthetic_120-022-025",
+            "keyboard_electronic_074-075-025"
+        ]
+    },
+    {
+        "file": "overlap_001_keyboard_flute.wav",
+        "components": [
+            "keyboard_electronic_074-085-100",
+            "flute_acoustic_007-088-127"
+        ]
+    },
+    {
+        "file": "overlap_002_bass_flute_keyboard.wav",
+        "components": [
+            "bass_synthetic_057-057-050",
+            "flute_acoustic_022-071-075",
+            "keyboard_electronic_096-022-127"
+        ]
+    },
+    {
+        "file": "overlap_003_flute_bass_keyboard.wav",
+        "components": [
+            "flute_synthetic_001-033-025",
+            "bass_synthetic_087-089-127",
+            "keyboard_acoustic_005-041-075"
+        ]
+    },
+    {
+        "file": "overlap_004_keyboard_bass_guitar.wav",
+        "components": [
+            "keyboard_electronic_047-028-050",
+            "bass_synthetic_022-073-050",
+            "guitar_acoustic_026-080-050"
+        ]
+    },
+    {
+        "file": "overlap_005_flute_guitar.wav",
+        "components": [
+            "flute_acoustic_014-067-100",
+            "guitar_electronic_038-061-025"
+        ]
+    },
+    {
+        "file": "overlap_006_bass_flute.wav",
+        "components": [
+            "bass_synthetic_129-085-127",
+            "flute_acoustic_015-088-025"
+        ]
+    },
+    {
+        "file": "overlap_007_bass_flute.wav",
+        "components": [
+            "bass_synthetic_092-098-127",
+            "flute_acoustic_007-091-127"
+        ]
+    },
+    {
+        "file": "overlap_008_bass_flute_keyboard.wav",
+        "components": [
+            "bass_synthetic_050-044-050",
+            "flute_electronic_000-089-127",
+            "keyboard_electronic_034-050-100"
+        ]
+    },
+    {
+        "file": "overlap_009_guitar_bass_flute.wav",
+        "components": [
+            "guitar_acoustic_024-063-100",
+            "bass_synthetic_092-024-050",
+            "flute_acoustic_019-056-025"
+        ]
+    },
+    {
+        "file": "overlap_010_flute_bass_keyboard.wav",
+        "components": [
+            "flute_acoustic_007-086-050",
+            "bass_synthetic_081-043-050",
+            "keyboard_electronic_081-052-025"
+        ]
+    },
+    {
+        "file": "overlap_011_guitar_keyboard.wav",
+        "components": [
+            "guitar_acoustic_002-071-127",
+            "keyboard_electronic_009-053-075"
+        ]
+    },
+    {
+        "file": "overlap_012_flute_guitar_keyboard.wav",
+        "components": [
+            "flute_acoustic_001-070-025",
+            "guitar_acoustic_028-071-127",
+            "keyboard_electronic_071-080-127"
+        ]
+    },
+    {
+        "file": "overlap_013_bass_guitar.wav",
+        "components": [
+            "bass_synthetic_149-090-127",
+            "guitar_acoustic_023-077-100"
+        ]
+    },
+    {
+        "file": "overlap_014_guitar_keyboard.wav",
+        "components": [
+            "guitar_acoustic_009-086-050",
+            "keyboard_electronic_030-021-050"
+        ]
+    },
+    {
+        "file": "overlap_015_guitar_keyboard.wav",
+        "components": [
+            "guitar_acoustic_024-035-025",
+            "keyboard_electronic_099-082-050"
+        ]
+    },
+    {
+        "file": "overlap_016_bass_keyboard_flute.wav",
+        "components": [
+            "bass_synthetic_022-096-025",
+            "keyboard_synthetic_003-075-050",
+            "flute_acoustic_007-058-127"
+        ]
+    },
+    {
+        "file": "overlap_017_guitar_keyboard.wav",
+        "components": [
+            "guitar_electronic_045-042-050",
+            "keyboard_electronic_039-072-050"
+        ]
+    },
+    {
+        "file": "overlap_018_flute_guitar_bass.wav",
+        "components": [
+            "flute_acoustic_013-094-050",
+            "guitar_acoustic_026-056-025",
+            "bass_synthetic_093-048-127"
+        ]
+    },
+    {
+        "file": "overlap_019_bass_guitar_keyboard.wav",
+        "components": [
+            "bass_electronic_022-036-127",
+            "guitar_acoustic_006-082-127",
+            "keyboard_electronic_040-080-050"
+        ]
+    },
+    {
+        "file": "overlap_020_keyboard_guitar.wav",
+        "components": [
+            "keyboard_electronic_007-030-025",
+            "guitar_electronic_003-027-127"
+        ]
+    },
+    {
+        "file": "overlap_021_bass_guitar.wav",
+        "components": [
+            "bass_synthetic_067-078-127",
+            "guitar_synthetic_010-085-100"
+        ]
+    },
+    {
+        "file": "overlap_022_flute_guitar_bass.wav",
+        "components": [
+            "flute_acoustic_015-088-050",
+            "guitar_synthetic_012-071-050",
+            "bass_synthetic_022-098-025"
+        ]
+    },
+    {
+        "file": "overlap_023_guitar_flute.wav",
+        "components": [
+            "guitar_synthetic_005-070-100",
+            "flute_acoustic_014-069-127"
+        ]
+    },
+    {
+        "file": "overlap_024_bass_keyboard_guitar.wav",
+        "components": [
+            "bass_synthetic_092-059-127",
+            "keyboard_electronic_007-040-025",
+            "guitar_electronic_027-023-127"
+        ]
+    },
+    {
+        "file": "overlap_025_bass_flute_guitar.wav",
+        "components": [
+            "bass_synthetic_141-067-050",
+            "flute_synthetic_005-105-075",
+            "guitar_electronic_010-064-100"
+        ]
+    },
+    {
+        "file": "overlap_026_bass_guitar.wav",
+        "components": [
+            "bass_synthetic_006-023-025",
+            "guitar_electronic_015-045-075"
+        ]
+    },
+    {
+        "file": "overlap_027_guitar_bass.wav",
+        "components": [
+            "guitar_electronic_044-101-025",
+            "bass_synthetic_112-049-127"
+        ]
+    },
+    {
+        "file": "overlap_028_keyboard_bass.wav",
+        "components": [
+            "keyboard_electronic_047-047-025",
+            "bass_synthetic_076-064-075"
+        ]
+    },
+    {
+        "file": "overlap_029_keyboard_guitar.wav",
+        "components": [
+            "keyboard_electronic_102-070-075",
+            "guitar_acoustic_024-104-100"
+        ]
+    },
+    {
+        "file": "overlap_030_keyboard_guitar.wav",
+        "components": [
+            "keyboard_electronic_088-051-075",
+            "guitar_electronic_030-079-025"
+        ]
+    },
+    {
+        "file": "overlap_031_flute_keyboard_guitar.wav",
+        "components": [
+            "flute_synthetic_002-044-050",
+            "keyboard_electronic_070-023-127",
+            "guitar_acoustic_033-034-025"
+        ]
+    },
+    {
+        "file": "overlap_032_keyboard_bass_flute.wav",
+        "components": [
+            "keyboard_electronic_012-055-025",
+            "bass_synthetic_008-054-127",
+            "flute_acoustic_029-069-025"
+        ]
+    },
+    {
+        "file": "overlap_033_flute_keyboard.wav",
+        "components": [
+            "flute_acoustic_008-098-100",
+            "keyboard_electronic_052-057-025"
+        ]
+    },
+    {
+        "file": "overlap_034_flute_guitar_keyboard.wav",
+        "components": [
+            "flute_synthetic_005-065-075",
+            "guitar_electronic_026-100-127",
+            "keyboard_electronic_102-033-075"
+        ]
+    },
+    {
+        "file": "overlap_035_guitar_flute.wav",
+        "components": [
+            "guitar_acoustic_009-033-025",
+            "flute_acoustic_019-093-025"
+        ]
+    },
+    {
+        "file": "overlap_036_keyboard_flute_guitar.wav",
+        "components": [
+            "keyboard_electronic_101-084-025",
+            "flute_acoustic_001-076-100",
+            "guitar_synthetic_007-107-075"
+        ]
+    },
+    {
+        "file": "overlap_037_keyboard_guitar_bass.wav",
+        "components": [
+            "keyboard_electronic_050-022-025",
+            "guitar_synthetic_005-096-075",
+            "bass_electronic_024-027-075"
+        ]
+    },
+    {
+        "file": "overlap_038_keyboard_guitar.wav",
+        "components": [
+            "keyboard_electronic_104-061-025",
+            "guitar_electronic_023-037-050"
+        ]
+    },
+    {
+        "file": "overlap_039_guitar_keyboard_flute.wav",
+        "components": [
+            "guitar_electronic_007-076-025",
+            "keyboard_electronic_009-091-050",
+            "flute_acoustic_026-060-025"
+        ]
+    },
+    {
+        "file": "overlap_040_keyboard_flute.wav",
+        "components": [
+            "keyboard_electronic_070-103-100",
+            "flute_acoustic_027-063-100"
+        ]
+    },
+    {
+        "file": "overlap_041_keyboard_guitar.wav",
+        "components": [
+            "keyboard_electronic_058-056-050",
+            "guitar_acoustic_019-076-025"
+        ]
+    },
+    {
+        "file": "overlap_042_bass_guitar.wav",
+        "components": [
+            "bass_synthetic_022-039-075",
+            "guitar_electronic_044-108-100"
+        ]
+    },
+    {
+        "file": "overlap_043_keyboard_bass.wav",
+        "components": [
+            "keyboard_electronic_041-064-127",
+            "bass_synthetic_117-099-127"
+        ]
+    },
+    {
+        "file": "overlap_044_bass_flute.wav",
+        "components": [
+            "bass_synthetic_060-075-050",
+            "flute_acoustic_006-053-025"
+        ]
+    },
+    {
+        "file": "overlap_045_bass_guitar.wav",
+        "components": [
+            "bass_synthetic_047-096-127",
+            "guitar_synthetic_002-093-075"
+        ]
+    },
+    {
+        "file": "overlap_046_keyboard_bass.wav",
+        "components": [
+            "keyboard_acoustic_007-022-100",
+            "bass_synthetic_071-100-050"
+        ]
+    },
+    {
+        "file": "overlap_047_bass_guitar_flute.wav",
+        "components": [
+            "bass_electronic_010-024-100",
+            "guitar_acoustic_032-079-050",
+            "flute_synthetic_004-031-075"
+        ]
+    },
+    {
+        "file": "overlap_048_guitar_bass_keyboard.wav",
+        "components": [
+            "guitar_electronic_001-044-050",
+            "bass_synthetic_105-079-025",
+            "keyboard_electronic_056-047-050"
+        ]
+    },
+    {
+        "file": "overlap_049_guitar_flute.wav",
+        "components": [
+            "guitar_acoustic_026-026-075",
+            "flute_synthetic_002-038-127"
+        ]
+    }
+]
