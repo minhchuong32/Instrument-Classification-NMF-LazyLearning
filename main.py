@@ -9,6 +9,9 @@ from sklearn.preprocessing import StandardScaler
 from scipy.spatial import distance
 import threading
 import pygame
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 
 # --- CẤU HÌNH ---
 SR = 22050
@@ -17,7 +20,7 @@ CLASSES = ["cel", "cla", "flu", "gac"]
 # Khởi tạo pygame mixer cho phát nhạc
 pygame.mixer.init()
 
-# --- BƯỚC 1 & 2: TIỀN XỬ LÝ & TRÍCH XUẤT ĐẶC TRƯNG ---
+# TIỀN XỬ LÝ & TRÍCH XUẤT ĐẶC TRƯNG ---
 def extract_all_features(y, sr):
     y_trim, _ = librosa.effects.trim(y, top_db=25)
     mfcc = librosa.feature.mfcc(y=y_trim, sr=sr, n_mfcc=13)
@@ -34,7 +37,7 @@ def extract_all_features(y, sr):
     )
     return features
 
-# --- BƯỚC 3: THUẬT TOÁN PHÂN LOẠI (LAZY LEARNING) ---
+# THUẬT TOÁN PHÂN LOẠI (LAZY LEARNING) ---
 def lazy_classify(test_features, train_csv="data/nsynth_features_detail.csv"):
     df = pd.read_csv(train_csv)
     X_train = df.iloc[:, :-2].values
@@ -52,24 +55,29 @@ def separate_nmf(file_path):
     S = np.abs(librosa.stft(y))
     W, H = librosa.decompose.decompose(S, n_components=2, sort=True)
     output_files = []
+    output_signals = []
+    
     for i in range(2):
         S_i = np.outer(W[:, i], H[i, :])
         y_out = librosa.istft(S_i * np.exp(1j * np.angle(librosa.stft(y))))
         out_name = f"extracted_part_{i+1}.wav"
         sf.write(out_name, y_out, sr)
         output_files.append(out_name)
-    return output_files
+        output_signals.append(y_out)
+    
+    return output_files, output_signals, y, sr
 
-# --- GIAO DIỆN HIỆN ĐẠI VỚI NHIỀU FILE ---
+# --- GIAO DIỆN ---
 class ModernMusicApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Music Classification & Source Separation")
-        self.root.geometry("900x700")
+        self.root.geometry("1200x800")
         self.root.configure(bg="#f5f5f5")
         
-        self.audio_files = []  # Danh sách file đã tải
-        self.current_playing = None  # File đang phát
+        self.audio_files = []
+        self.current_playing = None
+        self.waveform_window = None
         
         # Style configuration
         self.setup_styles()
@@ -222,7 +230,6 @@ class ModernMusicApp:
         )
         btn_clear.pack(side="right")
         
-        # Scrollable frame for file list
         list_frame = tk.Frame(inner, bg="#f9f9f9")
         list_frame.pack(fill="both", expand=True)
         
@@ -278,7 +285,7 @@ class ModernMusicApp:
         
         self.btn_nmf_selected = ttk.Button(
             btn_frame,
-            text="🔊 NMF Selected",
+            text="🔊 NMF + Visualize",
             command=self.process_selected_nmf,
             state="disabled",
             style='Secondary.TButton'
@@ -356,18 +363,14 @@ class ModernMusicApp:
         self.update_button_states()
 
     def update_file_list(self):
-        # Clear existing widgets
         for widget in self.file_list_frame.winfo_children():
             widget.destroy()
         
-        # Update count
         self.lbl_count.config(text=f"{len(self.audio_files)} file(s) loaded")
         
-        # Create file items
         for idx, file_info in enumerate(self.audio_files):
             self.create_file_item(file_info, idx)
         
-        # Update canvas scroll region
         self.file_list_frame.update_idletasks()
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
@@ -375,7 +378,6 @@ class ModernMusicApp:
         item_frame = tk.Frame(self.file_list_frame, bg="white", relief="solid", bd=1)
         item_frame.pack(fill="x", pady=5, padx=5)
         
-        # Checkbox and name
         top_frame = tk.Frame(item_frame, bg="white")
         top_frame.pack(fill="x", padx=10, pady=8)
         
@@ -397,11 +399,9 @@ class ModernMusicApp:
         )
         name_label.pack(side="left", fill="x", expand=True, padx=5)
         
-        # Buttons frame
         btn_frame = tk.Frame(top_frame, bg="white")
         btn_frame.pack(side="right")
         
-        # Play button
         play_btn = tk.Button(
             btn_frame,
             text="▶",
@@ -416,7 +416,6 @@ class ModernMusicApp:
         )
         play_btn.pack(side="left", padx=2)
         
-        # Stop button
         stop_btn = tk.Button(
             btn_frame,
             text="⬛",
@@ -431,7 +430,6 @@ class ModernMusicApp:
         )
         stop_btn.pack(side="left", padx=2)
         
-        # Delete button
         del_btn = tk.Button(
             btn_frame,
             text="🗑",
@@ -446,7 +444,6 @@ class ModernMusicApp:
         )
         del_btn.pack(side="left", padx=2)
         
-        # Result label
         if file_info['result']:
             result_label = tk.Label(
                 item_frame,
@@ -479,6 +476,29 @@ class ModernMusicApp:
             self.current_playing = None
         except:
             pass
+
+    def play_signal(self, signal, sr):
+        """Play audio signal directly from numpy array"""
+        try:
+            # Stop current playback
+            if self.current_playing:
+                pygame.mixer.music.stop()
+            
+            # Create temporary file
+            temp_file = "temp_playback.wav"
+            sf.write(temp_file, signal, sr)
+            
+            # Load and play
+            pygame.mixer.music.load(temp_file)
+            pygame.mixer.music.play()
+            self.current_playing = temp_file
+            
+            # Update result text
+            self.txt_result.config(state="normal")
+            self.txt_result.insert("1.0", f"▶ Playing separated component...\n")
+            self.txt_result.config(state="disabled")
+        except Exception as e:
+            messagebox.showerror("Playback Error", f"Failed to play audio: {str(e)}")
 
     def delete_file(self, idx):
         del self.audio_files[idx]
@@ -556,11 +576,21 @@ class ModernMusicApp:
         
         def nmf_thread():
             results = []
+            viz_data = []
+            
             for file_info in selected_files:
                 try:
                     results.append(f"\n📁 {file_info['name']}:")
-                    files = separate_nmf(file_info['path'])
+                    files, signals, original, sr = separate_nmf(file_info['path'])
                     results.append("  ✓ Separated into 2 components")
+                    
+                    # Store data for visualization
+                    viz_data.append({
+                        'name': file_info['name'],
+                        'original': original,
+                        'components': signals,
+                        'sr': sr
+                    })
                     
                     for idx, f in enumerate(files, 1):
                         y, sr = librosa.load(f, sr=SR)
@@ -570,13 +600,13 @@ class ModernMusicApp:
                 except Exception as e:
                     results.append(f"  ✗ Error: {str(e)}")
             
-            self.root.after(0, lambda: self.display_nmf_results(results))
+            self.root.after(0, lambda: self.display_nmf_results(results, viz_data))
         
         thread = threading.Thread(target=nmf_thread)
         thread.daemon = True
         thread.start()
 
-    def display_nmf_results(self, results):
+    def display_nmf_results(self, results, viz_data):
         self.txt_result.config(state="normal")
         self.txt_result.delete("1.0", tk.END)
         self.txt_result.insert("1.0", "═" * 50 + "\n")
@@ -585,8 +615,140 @@ class ModernMusicApp:
         for result in results:
             self.txt_result.insert(tk.END, result + "\n")
         self.txt_result.insert(tk.END, "\n" + "─" * 50 + "\n")
-        self.txt_result.insert(tk.END, "Analysis completed!")
+        self.txt_result.insert(tk.END, "Analysis completed! Opening visualization...")
         self.txt_result.config(state="disabled")
+        
+        # Show waveform visualization
+        if viz_data:
+            self.show_waveform_window(viz_data)
+
+    def show_waveform_window(self, viz_data):
+        # Close existing window if any
+        if self.waveform_window and self.waveform_window.winfo_exists():
+            self.waveform_window.destroy()
+        
+        self.waveform_window = tk.Toplevel(self.root)
+        self.waveform_window.title("Waveform Visualization - NMF Analysis")
+        self.waveform_window.geometry("1000x800")
+        self.waveform_window.configure(bg="white")
+        
+        # Create notebook for multiple files
+        notebook = ttk.Notebook(self.waveform_window)
+        notebook.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        for data in viz_data:
+            # Create frame for each file
+            frame = tk.Frame(notebook, bg="white")
+            notebook.add(frame, text=data['name'])
+            
+            # Create matplotlib figure
+            fig = Figure(figsize=(10, 8), facecolor='white')
+            
+            # Original signal
+            ax1 = fig.add_subplot(3, 1, 1)
+            time_original = np.arange(len(data['original'])) / data['sr']
+            ax1.plot(time_original, data['original'], color='#2196F3', linewidth=0.5)
+            ax1.set_title('Original Signal', fontsize=12, fontweight='bold', pad=10)
+            ax1.set_xlabel('Time (s)', fontsize=10)
+            ax1.set_ylabel('Amplitude', fontsize=10)
+            ax1.grid(True, alpha=0.3)
+            ax1.set_xlim(0, time_original[-1])
+            
+            # Component 1
+            ax2 = fig.add_subplot(3, 1, 2)
+            time_comp1 = np.arange(len(data['components'][0])) / data['sr']
+            ax2.plot(time_comp1, data['components'][0], color='#4CAF50', linewidth=0.5)
+            ax2.set_title('Component 1 (NMF)', fontsize=12, fontweight='bold', pad=10)
+            ax2.set_xlabel('Time (s)', fontsize=10)
+            ax2.set_ylabel('Amplitude', fontsize=10)
+            ax2.grid(True, alpha=0.3)
+            ax2.set_xlim(0, time_comp1[-1])
+            
+            # Component 2
+            ax3 = fig.add_subplot(3, 1, 3)
+            time_comp2 = np.arange(len(data['components'][1])) / data['sr']
+            ax3.plot(time_comp2, data['components'][1], color='#FF9800', linewidth=0.5)
+            ax3.set_title('Component 2 (NMF)', fontsize=12, fontweight='bold', pad=10)
+            ax3.set_xlabel('Time (s)', fontsize=10)
+            ax3.set_ylabel('Amplitude', fontsize=10)
+            ax3.grid(True, alpha=0.3)
+            ax3.set_xlim(0, time_comp2[-1])
+            
+            fig.tight_layout(pad=2.0)
+            
+            # Embed in tkinter
+            canvas = FigureCanvasTkAgg(fig, master=frame)
+            canvas.draw()
+            canvas.get_tk_widget().pack(fill="both", expand=True)
+            
+            # Add playback controls
+            controls_frame = tk.Frame(frame, bg="white")
+            controls_frame.pack(pady=10)
+            
+            # Info label
+            info_text = f"Original duration: {len(data['original'])/data['sr']:.2f}s | Sample rate: {data['sr']} Hz"
+            info_label = tk.Label(controls_frame, text=info_text, bg="white", fg="#666666", font=("Segoe UI", 9))
+            info_label.pack(pady=(0, 10))
+            
+            # Playback buttons
+            btn_frame = tk.Frame(controls_frame, bg="white")
+            btn_frame.pack()
+            
+            btn_play_original = tk.Button(
+                btn_frame,
+                text="▶ Play Original",
+                command=lambda d=data: self.play_signal(d['original'], d['sr']),
+                bg="#2196F3",
+                fg="white",
+                font=("Segoe UI", 9, "bold"),
+                relief="flat",
+                padx=15,
+                pady=8,
+                cursor="hand2"
+            )
+            btn_play_original.pack(side="left", padx=5)
+            
+            btn_play_comp1 = tk.Button(
+                btn_frame,
+                text="▶ Play Component 1",
+                command=lambda d=data: self.play_signal(d['components'][0], d['sr']),
+                bg="#4CAF50",
+                fg="white",
+                font=("Segoe UI", 9, "bold"),
+                relief="flat",
+                padx=15,
+                pady=8,
+                cursor="hand2"
+            )
+            btn_play_comp1.pack(side="left", padx=5)
+            
+            btn_play_comp2 = tk.Button(
+                btn_frame,
+                text="▶ Play Component 2",
+                command=lambda d=data: self.play_signal(d['components'][1], d['sr']),
+                bg="#FF9800",
+                fg="white",
+                font=("Segoe UI", 9, "bold"),
+                relief="flat",
+                padx=15,
+                pady=8,
+                cursor="hand2"
+            )
+            btn_play_comp2.pack(side="left", padx=5)
+            
+            btn_stop = tk.Button(
+                btn_frame,
+                text="⬛ Stop",
+                command=self.stop_audio,
+                bg="#f44336",
+                fg="white",
+                font=("Segoe UI", 9, "bold"),
+                relief="flat",
+                padx=15,
+                pady=8,
+                cursor="hand2"
+            )
+            btn_stop.pack(side="left", padx=5)
 
 
 if __name__ == "__main__":
